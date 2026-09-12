@@ -36,5 +36,5 @@ RUN a2enmod rewrite
 
 EXPOSE 80
 
-# تنفيذ المايجريشن والكاش ثم بدء الأباتشي
-CMD php artisan migrate --force && php artisan config:cache && php artisan route:cache && apache2-foreground
+# بدء الأباتشي مباشرة
+CMD ["apache2-foreground"]
