@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y \
     unzip \
     libpq-dev
 
-# تثبيت Node.js (عشان نقدر نعمل Build للـ Vue)
+# تثبيت Node.js
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs
 
@@ -22,20 +22,18 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 COPY . .
 
-# تثبيت حزم لاراڤل وبناء الواجهة الأمامية (Vue)
+# تثبيت حزم لاراڤل وبناء الواجهة الأمامية
 RUN composer install --no-dev --optimize-autoloader
 RUN npm install && npm run build
 
 # إعداد أذونات مجلدات التخزين والكاش
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# تعديل مسار أباتشي ليوجه إلى public الخاصة بلاراڤل
+# تعديل مسار أباتشي ليوجه إلى public
 RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
 RUN a2enmod rewrite
 
-# نسخ ملف التشغيل وإعطائه صلاحية التنفيذ
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
-
 EXPOSE 80
-CMD ["entrypoint.sh"]
+
+# تنفيذ المايجريشن والكاش ثم بدء الأباتشي مباشرة بشكل آمن
+CMD php artisan migrate --force && php artisan config:cache && php artisan route:cache && apache2-foreground
