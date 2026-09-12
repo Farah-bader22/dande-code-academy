@@ -1,6 +1,6 @@
 FROM php:8.2-apache
 
-# تثبيت الأدوات الأساسية ومكتبات النظام
+# تثبيت الأدوات الأساسية ومكتبات ونظام الـ PostgreSQL
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -9,7 +9,8 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     zip \
     unzip \
-    libpq-dev
+    libpq-dev \
+    && docker-php-ext-install pdo pdo_pgsql pgsql
 
 # تثبيت Node.js
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
@@ -35,5 +36,5 @@ RUN a2enmod rewrite
 
 EXPOSE 80
 
-# تنفيذ المايجريشن والكاش ثم بدء الأباتشي مباشرة بشكل آمن
+# تنفيذ المايجريشن والكاش ثم بدء الأباتشي
 CMD php artisan migrate --force && php artisan config:cache && php artisan route:cache && apache2-foreground
