@@ -34,7 +34,10 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 RUN sed -i 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/000-default.conf
 RUN a2enmod rewrite
 
+# إعطاء صلاحيات تنفيذ لملف التشغيل
+COPY start.sh /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh
+
 EXPOSE 80
 
-# تنفيذ المايجريشن إجبارياً قبل تشغيل الأباتشي
-CMD php artisan migrate --force && apache2-foreground
+CMD ["/usr/local/bin/start.sh"]
