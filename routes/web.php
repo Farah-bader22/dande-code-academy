@@ -168,3 +168,12 @@ Route::get('/run-migrations-now', function () {
     \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
     return "Done! Database tables created successfully.";
 });
+
+Route::get('/fix-database-now', function () {
+    try {
+        Artisan::call('migrate', ['--force' => true]);
+        return 'تم بناء الجداول بنجاح يا فنانة! صار فيكِ تسجلي الآن.';
+    } catch (\Exception $e) {
+        return 'خطأ: ' . $e->getMessage();
+    }
+});
