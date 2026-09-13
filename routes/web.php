@@ -163,3 +163,8 @@ Route::get('/go-parent', function () {
     }
     return "لم يتم العثور على ولي أمر!";
 })->name('go.parent');
+
+Route::get('/run-migrations-now', function () {
+    \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+    return "Done! Database tables created successfully.";
+});
