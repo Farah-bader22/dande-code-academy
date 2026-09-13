@@ -18,7 +18,7 @@ require __DIR__.'/../vendor/autoload.php';
 /** @var Application $app */
 $app = require_once __DIR__.'/../bootstrap/app.php';
 
-// تشغيل الـ Migration تلقائياً لإنشاء الجداول على قاعدة بيانات Render
+// تشغيل الـ Migrations تلقائياً لإنشاء جدول users وباقي الجداول
 try {
     Artisan::call('migrate', ['--force' => true]);
 } catch (\Exception $e) {
