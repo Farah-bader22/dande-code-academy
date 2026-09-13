@@ -11,6 +11,9 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        // الوثوق بالبروكسي الخاص بـ Render لتثبيت الجلسات والـ Cookies عبر HTTPS
+        $middleware->trustProxies(at: '*');
+
         $middleware->alias([
             'teacher' => \App\Http\Middleware\TeacherMiddleware::class,
         ]);
