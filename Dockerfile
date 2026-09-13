@@ -36,5 +36,5 @@ RUN a2enmod rewrite
 
 EXPOSE 80
 
-# بدء الأباتشي مباشرة
-CMD ["apache2-foreground"]
+# تنفيذ المايجريشن إجبارياً قبل تشغيل الأباتشي
+CMD php artisan migrate --force && apache2-foreground
